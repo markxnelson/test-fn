@@ -1,0 +1,19 @@
+box: ubuntu 
+
+build: 
+  steps:
+    - script:
+      name: Install pre-reqs
+      code: |
+        apt-get update
+        apt-get -y install docker
+    - script:
+      name: Start fn server
+      code: | 
+        docker run -d --rm --name functions --network=$DOCKER_NETWORK_NAME -e FN_DOCKER_NETWORKS=$DOCKER_NETWORK_NAME -v /var/run/docker.sock:/var/run/docker.sock -v $PWD/data:/app/data -p 8080:8080 fnproject/fnserver
+    - script: 
+      name: Install fn cli
+      code: |
+        wget https://github.com/fnproject/cli/releases/download/0.4.120/fn_linux 
+        mv fn_linux fn
+        fn help
