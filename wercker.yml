@@ -6,7 +6,7 @@ build:
       name: Install pre-reqs
       code: |
         apt-get update
-        apt-get -y install docker
+        apt-get -y install docker 
     - script:
       name: Start fn server
       code: | 
