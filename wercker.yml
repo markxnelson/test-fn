@@ -45,6 +45,7 @@ build:
           ping -c 3 functions
           curl functions:8080
           #
+          cd $WERCKER_ROOT/test-fn1
           export FN_REGISTRY=docker.io/$USERNAME
           export FN_API_URL=http://functions:8080
           fn deploy --app myapp 
@@ -55,7 +56,7 @@ build:
     - script:
         name: Invoke the function and verify it returns the expected result
         code: |
-            if curlOutput=`curl -s functions:8080/r/myapp/test-fn`; then 
+            if curlOutput=`curl -s functions:8080/r/myapp/test-fn1`; then 
                 export expected='{"message":"Hello World"}'
                 if [ "$curlOutput" == "$expected" ]; then
                     echo "Test passed: function gave expected response: " $expected
