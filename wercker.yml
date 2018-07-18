@@ -7,7 +7,7 @@ build:
       name: Install pre-reqs
       code: |
         apt-get update
-        apt-get -y install add wget curl docker
+        apt-get -y install wget curl docker
     - script:
       name: Start fn server
       code: | 
