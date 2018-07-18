@@ -1,25 +1,25 @@
 box: alpine:edge
 
-build: 
+build:
+  # Simple Fn use case in which we start the fn server (using docker in docker) and build, deploy and call a function
+  box: alpine:edge
   docker: true
   steps:
     - script:
-      name: Install pre-reqs
-      code: |
-        apk --no-cache add wget 
-        apk --no-cache add curl
-        apk --no-cache add docker
+        name: Install wget
+        code: apk --no-cache add wget    
     - script:
-      name: Start fn server
-      code: | 
-        docker run --privileged -d --rm --name functions --network=$DOCKER_NETWORK_NAME -v $PWD/data:/app/data -p 8080:8080 fnproject/fnserver
-    - script: 
-      name: Install fn cli
-      code: |
-        wget https://github.com/fnproject/cli/releases/download/0.4.120/fn_alpine 
-        mv fn_alpine fn
-        chmod +x fn
-        ./fn help
+        name: Install Curl
+        code: apk --no-cache add curl     
+    - script:
+        name: Install docker CLI (needed by Fn)
+        code: apk --no-cache add docker    
+    - script:
+        name: Start fn server (using DinD)
+        code: |
+          docker ps
+          docker run --privileged -d --rm --name functions --network=$DOCKER_NETWORK_NAME -v $PWD/data:/app/data -p 8080:8080 fnproject/fnserver 
+          # need to allow time for the fn server to start - the next step is slow which should give it enough time
     - script:
         name: Install fn CLI (do this once for all the fn pipelines)
         code: |
@@ -27,10 +27,10 @@ build:
           cd $WERCKER_ROOT/fn
           wget --no-verbose https://github.com/fnproject/cli/releases/download/0.4.117/fn_alpine  # need to replace with a URI to the latest version
           mv fn_alpine fn
-          chmod a+x $WERCKER_ROOT/fn/fn
+          chmod a+x $WERCKER_ROOT/fn/fn 
           export PATH=$WERCKER_ROOT/fn:$PATH
           fn --version
-    - script:
+    - script: 
         name: Login to Docker Hub (so we can deploy the function to it)
         code: docker login -u $USERNAME -p $PASSWORD
     - script:
@@ -48,7 +48,7 @@ build:
           cd $WERCKER_ROOT/test-fn1
           export FN_REGISTRY=docker.io/$USERNAME
           export FN_API_URL=http://functions:8080
-          fn deploy --app myapp
+          fn deploy --app myapp 
     - script:
         name: List deployed functions
         code: |
@@ -56,7 +56,7 @@ build:
     - script:
         name: Invoke the function and verify it returns the expected result
         code: |
-            if curlOutput=`curl -s functions:8080/r/myapp/test-fn1`; then
+            if curlOutput=`curl -s functions:8080/r/myapp/test-fn1`; then 
                 export expected='{"message":"Hello World"}'
                 if [ "$curlOutput" == "$expected" ]; then
                     echo "Test passed: function gave expected response: " $expected
@@ -64,14 +64,14 @@ build:
                     echo "Test failed: function gave unexpected response: " $curlOutput
                     echo "The expected response was: " $expected
                     exit 1
-                fi
-            else
+                fi   
+            else 
                 echo "Test failed: function did not respond"
                 exit 1
-            fi
+            fi   
   after-steps:
     - script:
         name: Clean up
         code: |
           # kill fn server (don't fail if there isn't one)
-          docker kill functions 2> /dev/null | true
+          docker kill functions 2> /dev/null | true  
