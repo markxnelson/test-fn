@@ -6,8 +6,9 @@ build:
     - script:
       name: Install pre-reqs
       code: |
-        apt-get update
-        apt-get -y install wget curl docker
+        apk --no-cache add wget 
+        apk --no-cache add curl
+        apk --no-cache add docker
     - script:
       name: Start fn server
       code: | 
