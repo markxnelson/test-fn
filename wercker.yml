@@ -1,4 +1,4 @@
-box: ubuntu
+box: alpine:edge
 
 build: 
   docker: true
@@ -15,10 +15,9 @@ build:
     - script: 
       name: Install fn cli
       code: |
-        wget https://github.com/fnproject/cli/releases/download/0.4.120/fn_linux 
-        mv fn_linux fn
+        wget https://github.com/fnproject/cli/releases/download/0.4.120/fn_alpine 
+        mv fn_alpine fn
         chmod +x fn
-        ls -al
         fn help
     - script:
         name: Install fn CLI (do this once for all the fn pipelines)
