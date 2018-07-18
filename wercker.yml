@@ -1,7 +1,7 @@
-box: alpine
-docker: true
+box: alpine:edge
 
 build: 
+  docker: true
   steps:
     - script:
       name: Install pre-reqs
