@@ -19,7 +19,7 @@ build:
         wget https://github.com/fnproject/cli/releases/download/0.4.120/fn_alpine 
         mv fn_alpine fn
         chmod +x fn
-        fn help
+        ./fn help
     - script:
         name: Install fn CLI (do this once for all the fn pipelines)
         code: |
