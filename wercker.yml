@@ -1,4 +1,4 @@
-box: alpin 
+box: alpine
 
 build: 
   steps:
