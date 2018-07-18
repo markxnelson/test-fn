@@ -18,7 +18,7 @@ build:
       code: |
         wget https://github.com/fnproject/cli/releases/download/0.4.120/fn_linux 
         mv fn_linux fn
-        fn help
+        ./fn help
     - script:
         name: Install fn CLI (do this once for all the fn pipelines)
         code: |
